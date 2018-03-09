@@ -16,22 +16,34 @@ public class HackerRankFormat {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HackerRankFormat.class);
 
+    private static final String INPUT = "input";
+    private static final String OUTPUT = "output";
+
+    private static final String TESTCASE_PATTERN = ".*(\\d\\d)\\.txt$";
+    private static final String TESTCASE_PATTERN_VAL = "$1";
+
     public static Object[][] getTestCases(Path folder) {
         final List<Object[]> list = new ArrayList<>();
         try {
-            Files.newDirectoryStream(folder)
-                    .forEach( p -> list.add( getTestCase(p) ) );
+            Files.list(folder.resolve(INPUT))
+                    .forEach(inFile -> list.add(getTestCase(inFile.getParent().getParent()
+                            , inFile.getFileName().toString().replaceAll(TESTCASE_PATTERN, TESTCASE_PATTERN_VAL))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Object [][] array = new Object[list.size()][];
+        Object[][] array = new Object[list.size()][];
         return list.toArray(array);
     }
 
-    private static Object[] getTestCase(Path folder) {
+    private static Object[] getTestCase(Path folder, String testcase) {
         return new Object[]{
-                getFileContent(folder.resolve("input.txt")), getFileContent(folder.resolve("output.txt"))
+                getFileContent(getFilePath(folder, INPUT, testcase))
+                , getFileContent(getFilePath(folder, OUTPUT, testcase))
         };
+    }
+
+    private static Path getFilePath(Path folder, String type, String testcaseNum) {
+        return folder.resolve(type).resolve(String.format("%s%s.txt", type, testcaseNum));
     }
 
     public static Scanner getScanner(String input) {
@@ -47,7 +59,7 @@ public class HackerRankFormat {
         }
     }
 
-    public static Path getSrcTestResource(String folder){
+    public static Path getSrcTestResource(String folder) {
         return Paths.get("src/test/resources", folder);
     }
 }
