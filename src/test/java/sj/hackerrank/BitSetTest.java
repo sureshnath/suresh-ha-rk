@@ -13,7 +13,7 @@ public class BitSetTest {
 
     @DataProvider(name = "dp")
     public Object[][] getData() {
-        return getTestCases( getSrcTestResource("java_bitset_testcases"));
+        return getTestCases( getSrcTestResource("java-bitset-testcases"));
     }
 
     @Test(dataProvider = "dp")
