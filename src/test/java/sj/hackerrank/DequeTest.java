@@ -31,17 +31,14 @@ public class DequeTest {
      * @return - number of unique number in the map
      */
     private static Integer numberOfUniq(Map<Integer,Integer> map, Integer key, boolean isAdd){
-        LOGGER.debug("{} {} {}", isAdd?'A':'S', key, map.get(key));
-        map.compute(key, (k,v) -> nullWorkAround(isAdd,v) );
-        if (!isAdd){
-            LOGGER.debug("map size {}", map.size());
-        }
+        LOGGER.debug("{} {} {} {}", isAdd?'A':'S', key, map.get(key));
+        map.compute(key, (k,v) -> zeroToNull((isAdd? (v==null?1:v+1):v-1)) );
+        LOGGER.debug("map size {}", map.size());
         return map.size();
     }
 
-    private static Integer nullWorkAround(boolean isAdd, Integer v){
-        int retValueI = (isAdd? (v==null?1:v+1): (v==1? 0: v-1));
-        return retValueI == 0 ? null : retValueI;
+    private static Integer zeroToNull(Integer v){
+        return v == 0 ? null : v;
     }
 
     private static String getSolution(Scanner in) {
@@ -54,11 +51,12 @@ public class DequeTest {
             int num = in.nextInt();
             deque.addLast(num);
             int uniqCount = numberOfUniq(map,num,true);
-            if(i>=m && i<n-1){
+            if(i>m-1){
                 int dropNum = deque.removeFirst();
                 uniqCount = numberOfUniq(map,dropNum,false);
             }
             maxUniqCount = Math.max(maxUniqCount, uniqCount);
+            LOGGER.debug("max {}", maxUniqCount);
         }
         return maxUniqCount.toString();
     }

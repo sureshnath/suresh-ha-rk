@@ -26,6 +26,7 @@ public class HackerRankFormat {
         final List<Object[]> list = new ArrayList<>();
         try {
             Files.list(folder.resolve(INPUT))
+                    .filter(p->p.toString().matches(TESTCASE_PATTERN))
                     .forEach(inFile -> list.add(getTestCase(inFile.getParent().getParent()
                             , inFile.getFileName().toString().replaceAll(TESTCASE_PATTERN, TESTCASE_PATTERN_VAL))));
         } catch (IOException e) {
