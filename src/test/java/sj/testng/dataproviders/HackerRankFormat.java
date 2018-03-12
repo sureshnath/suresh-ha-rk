@@ -51,6 +51,10 @@ public class HackerRankFormat {
         return new Scanner(new StringReader(input));
     }
 
+    public static String trimmedAndLF(String s){
+        return s.trim().replaceAll("\r\n","\n");
+    }
+
     private static String getFileContent(Path path) {
         try {
             LOGGER.info("Reading file content: {}", path);
