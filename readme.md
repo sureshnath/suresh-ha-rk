@@ -1,1 +1,1 @@
-TODO
+Hacker rank helper
