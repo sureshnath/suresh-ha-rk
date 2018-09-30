@@ -1,7 +1,5 @@
 package sj.hackerrank;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,11 +12,8 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import static sj.testng.dataproviders.HackerRankFormat.*;
-import static sj.testng.dataproviders.HackerRankFormat.trimmedAndLF;
 
 public class MakingAnagrams {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(MakingAnagrams.class);
 
     @DataProvider(name = "dp")
     public Object[][] getData() {
@@ -32,40 +27,17 @@ public class MakingAnagrams {
         Assert.assertEquals(trimmedAndLF(sw.toString()), trimmedAndLF(expectedOutput));
     }
 
-    static class BiCount {
-        int aCount;
-        int bCount;
-
-        static BiCount getOrDefault(BiCount old) {
-            return Optional.ofNullable(old).orElse(new BiCount());
-        }
-
-        BiCount addA() {
-            aCount++;
-            return this;
-        }
-
-        BiCount addB() {
-            bCount++;
-            return this;
-        }
-
-        int diff() {
-            return Math.max(aCount, bCount) - Math.min(aCount, bCount);
-        }
-    }
-
     private static int makeAnagram(String a, String b) {
         int result = 0;
-        Map<Character, BiCount> map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>();
         for (Character c : a.toCharArray()) {
-            map.compute(c, (k, o) -> BiCount.getOrDefault(o).addA());
+            map.compute(c, (k, o) -> Optional.ofNullable(o).orElse(0) + 1 );
         }
         for (Character c : b.toCharArray()) {
-            map.compute(c, (k, o) -> BiCount.getOrDefault(o).addB());
+            map.compute(c, (k, o) -> Optional.ofNullable(o).orElse(0) - 1 );
         }
-        for (Map.Entry<Character, BiCount> entry : map.entrySet()) {
-            result += entry.getValue().diff();
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            result += Math.abs(entry.getValue());
         }
         return result;
     }
