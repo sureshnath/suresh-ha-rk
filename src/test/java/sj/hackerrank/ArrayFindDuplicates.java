@@ -1,14 +1,14 @@
 package sj.hackerrank;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 
 import static sj.testng.dataproviders.HackerRankFormat.*;
@@ -28,16 +28,11 @@ public class ArrayFindDuplicates {
     }
 
     private static int[] findDuplicates(int[] a) {
-        List<Integer> duplicateList = new ArrayList<>();
+        Map<Integer,Integer> map = new HashMap<>();
         for (int i = 0; i < a.length; i++) {
-            for (int j = i+1; j < a.length; j++) {
-                if (a[i]==a[j]){
-                    duplicateList.add(a[i]);
-                }
-            }
+            map.compute(a[i],(k,o)->Optional.ofNullable(o).orElse(0)+1);
         }
-        final Integer[] NO_INTS = new Integer[0];
-        return ArrayUtils.toPrimitive(duplicateList.toArray(NO_INTS));
+        return map.entrySet().stream().filter(e->e.getValue()>1).mapToInt(Map.Entry::getKey).toArray();
     }
 
     private void processSolution(Scanner scanner, PrintWriter pw) {
