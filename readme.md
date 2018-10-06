@@ -1,1 +1,1 @@
-Hacker rank helper - another
+Hacker rank helper - fixing unrecognized author by updating email address
