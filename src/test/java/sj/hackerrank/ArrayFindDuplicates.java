@@ -6,10 +6,7 @@ import org.testng.annotations.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 import static sj.testng.dataproviders.HackerRankFormat.*;
 
@@ -28,7 +25,7 @@ public class ArrayFindDuplicates {
     }
 
     private static int[] findDuplicates(int[] a) {
-        Map<Integer,Integer> map = new HashMap<>();
+        Map<Integer,Integer> map = new LinkedHashMap<>();
         for (int i = 0; i < a.length; i++) {
             map.compute(a[i],(k,o)->Optional.ofNullable(o).orElse(0)+1);
         }
